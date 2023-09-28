@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Portafolio.Views.HomePage"
+             Title="Principal">
+    <ScrollView>
+        <Grid>
+            <!-- Definición de las filas -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Imagen -->
+            <Image Grid.Row="0" Source="https://rmsoft.com.co/Portafolio/porta.jpg" Aspect="AspectFit" />
+
+            <!-- Texto de 150 caracteres con margen y centrado verticalmente -->
+            <Label 
+            Grid.Row="1" 
+            Text="Este es un texto de muestra para representar los 150 caracteres que se quieren mostrar en la aplicación. ¿Se ve bien?" 
+            VerticalOptions="Center" 
+            HorizontalOptions="CenterAndExpand"
+            Margin="15,20,15,0" />
+            <!-- Margen: izquierda, arriba, derecha, abajo -->
+        </Grid>
+    </ScrollView>
+
+
+</ContentPage>

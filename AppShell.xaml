@@ -3,12 +3,36 @@
     x:Class="Portafolio.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Portafolio"
+    xmlns:local="clr-namespace:Portafolio.Views"
     Shell.FlyoutBehavior="Disabled">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <!-- TabbedPage structure -->
+    <FlyoutItem Title="Menú Principal">
+        <!-- Nosotros Tab -->
+        <Tab Title="Nosotros" Icon="home_icon">
+            <ShellContent 
+            Title="Nosotros" 
+            ContentTemplate="{DataTemplate local:HomePage}" 
+            Route="HomePage" />
+        </Tab>
+
+        <!-- Soluciones Tab -->
+        <Tab Title="Soluciones" Icon="soluciones_icon">
+            <ShellContent 
+            Title="Soluciones" 
+            ContentTemplate="{DataTemplate local:SolucionesPage}" 
+            Route="SolucionesPage" />
+        </Tab>
+
+        <!-- Funcionalidades Tab (Está comentado en tu código original) -->
+        <!--<Tab Title="Novedades" Icon="funcionalidades.png">
+        <ShellContent 
+            Title="Novedades" 
+            ContentTemplate="{DataTemplate local:FuncionalidadesPage}" 
+            Route="FuncionalidadesPage" />
+    </Tab>-->
+    </FlyoutItem>
+
 
 </Shell>
+

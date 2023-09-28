@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Portafolio.Views.SolucionesPage"
+             Title="Soluciones Empresariales">
+    <Grid>
+        <!-- Definición de las columnas -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="105"/>
+            <!-- Ancho del menú lateral -->
+            <ColumnDefinition Width="*"/>
+            <!-- Resto del espacio para el contenido principal -->
+        </Grid.ColumnDefinitions>
+        <!-- Menú Lateral (Columna 0) -->
+        <StackLayout Grid.Column="0" BackgroundColor="#f6f6f6" Padding="5">
+            <CollectionView ItemsSource="{Binding Grupos}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Vertical" Spacing="0" HorizontalOptions="CenterAndExpand" Margin="2">
+                            <!-- Imagen -->
+                            <Image Source="{Binding Url}" 
+                           WidthRequest="40" 
+                           HeightRequest="20"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Aspect="AspectFill">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ProductoTapped"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+
+                            <!-- Nombre del grupo con reconocedor de gestos -->
+                            <Label Text="{Binding Nombre}" FontAttributes="Bold" Margin="2"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center"
+                           HorizontalOptions="CenterAndExpand">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ProductoTapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+        <StackLayout Grid.Column="1">
+            <CollectionView ItemsSource="{Binding Contenidos}" ItemsLayout="VerticalGrid, 3">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="5" CornerRadius="0" BorderColor="Transparent" HasShadow="False">
+                            <StackLayout>
+                                <!-- Imagen -->
+                                <Image Source="{Binding Url}" 
+                            WidthRequest="70" 
+                            HeightRequest="50"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            Aspect="AspectFill">
+                                </Image>
+                                <!-- Nombre debajo de la imagen -->
+                                <Label Text="{Binding Nombre}" 
+                            FontSize="12" 
+                            FontAttributes="Bold"
+                            LineBreakMode="WordWrap" 
+                            HorizontalTextAlignment="Center" 
+                            HorizontalOptions="CenterAndExpand"/>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </Grid>
+</ContentPage>

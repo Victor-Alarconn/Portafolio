@@ -30,12 +30,16 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android|AnyCPU'">
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#FFFFFF" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#FFFFFF" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -49,10 +53,29 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Data\" />
-	  <Folder Include="Modelos\" />
-	  <Folder Include="Views\" />
-	  <Folder Include="ViewModels\" />
+	  <None Remove="Resources\Images\flecha.png" />
+	  <None Remove="Resources\Images\Funcionalidades.png" />
+	  <None Remove="Resources\Images\Home.png" />
+	  <None Remove="Resources\Images\Home_icon.svg" />
+	  <None Remove="Resources\Images\Soluciones.png" />
+	  <None Remove="Resources\Images\soluciones_icon.svg" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="MySqlConnector" Version="2.2.7" />
+	  <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\FuncionalidadesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\HomePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\SolucionesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>

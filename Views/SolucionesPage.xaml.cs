@@ -15,17 +15,14 @@ public partial class SolucionesPage : ContentPage
 
     private void ProductoTapped(object sender, EventArgs e)
     {
-        object context = null;
-
-        if (sender is Label label)
-            context = label.BindingContext;
-        else if (sender is Image image)
-            context = image.BindingContext;
-
-        if (context is grupo grupo)
+        if (sender is ContentView contentView && contentView.BindingContext is grupo grupo)
         {
-            var listaContenidos = (BindingContext as SolucionesPageViewModel).ObtenerContenidoPorGrupo(grupo);
-            (BindingContext as SolucionesPageViewModel).Contenidos = new ObservableCollection<main>(listaContenidos);
+            var viewModel = BindingContext as SolucionesPageViewModel;
+            var listaContenidos = viewModel.ObtenerContenidoPorGrupo(grupo);
+            viewModel.Contenidos = new ObservableCollection<main>(listaContenidos);
+
+            // Cambia el valor de IsGroupSelected a 'true'
+            viewModel.IsGroupSelected = true;
         }
     }
 

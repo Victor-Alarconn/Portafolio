@@ -33,6 +33,17 @@ namespace Portafolio.ViewModels
             CargarProductos();
         }
 
+        private bool _isGroupSelected;
+        public bool IsGroupSelected
+        {
+            get { return _isGroupSelected; }
+            set
+            {
+                _isGroupSelected = value;
+                OnPropertyChanged(nameof(IsGroupSelected));
+            }
+        }
+
         private void CargarProductos()
         {
             using MySqlConnection connection = DataConexion.ObtenerConexion();
@@ -72,7 +83,8 @@ namespace Portafolio.ViewModels
                     Id_pt = Convert.ToInt32(reader["id_pt"]),
                     Nombre = reader["pt_nombre"].ToString(),
                     GrupoId = Convert.ToInt32(reader["Id_gr"]),
-                    Url = reader["pt_url"].ToString()
+                    Url = reader["pt_url"].ToString(),
+                    Descripcion = reader["pt_desc"].ToString()
                 });
             }
 

@@ -12,5 +12,6 @@ namespace Portafolio.Modelos
         public string Nombre { get; set; }
         public int GrupoId { get; set; }
         public string Url { get; set; }
+        public string Descripcion { get; set; }
     }
 }

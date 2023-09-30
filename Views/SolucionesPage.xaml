@@ -20,6 +20,12 @@
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="ProductoTapped"/>
                             </Frame.GestureRecognizers>
+                            <Frame.Triggers>
+                                <DataTrigger TargetType="Frame" Binding="{Binding IsSelected}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="#EC5D67"/>
+                                    <!-- o cualquier otro color que quieras usar para resaltar -->
+                                </DataTrigger>
+                            </Frame.Triggers>
                             <StackLayout Orientation="Vertical" Spacing="2" HorizontalOptions="CenterAndExpand">
                                 <!-- Imagen -->
                                 <Image Source="{Binding Url}" 
@@ -58,32 +64,34 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame Padding="5" CornerRadius="18" BorderColor="Gray" HasShadow="True" Margin="9">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCardTapped"/>
+                            </Frame.GestureRecognizers>
                             <StackLayout Orientation="Horizontal" Spacing="15">
 
                                 <!-- Contenedor para Imagen y Título a la izquierda -->
                                 <StackLayout WidthRequest="80" Spacing="5">
                                     <!-- Imagen en la parte superior del contenedor izquierdo -->
                                     <Image Source="{Binding Url}" 
-                               WidthRequest="50" 
-                               HeightRequest="40"
-                               Aspect="AspectFill">
+                                       WidthRequest="50" 
+                                       HeightRequest="40"
+                                       Aspect="AspectFill">
                                     </Image>
 
-                                    <!-- Nombre debajo de la imagen en el contenedor izquierdo -->
-                                    <Label Text="{Binding Nombre}" 
-                               FontSize="12" 
-                               FontAttributes="Bold"
-                               HorizontalTextAlignment="Center" 
-                               HorizontalOptions="CenterAndExpand"/>
+                                        <!-- Nombre debajo de la imagen en el contenedor izquierdo -->
+                                        <Label Text="{Binding Nombre}" 
+                                   FontSize="12" 
+                                   FontAttributes="Bold"
+                                   HorizontalTextAlignment="Center" 
+                                   HorizontalOptions="CenterAndExpand"/>
                                 </StackLayout>
 
-                                <!-- Descripción en el contenedor derecho -->
+                                    <!-- Descripción en el contenedor derecho -->
                                 <Label Text="{Binding Descripcion}" 
-                           FontSize="12" 
-                           HorizontalTextAlignment="Start" 
-                           HorizontalOptions="StartAndExpand"
-                           VerticalOptions="CenterAndExpand"/>
-
+                               FontSize="15" 
+                               HorizontalTextAlignment="Start" 
+                               HorizontalOptions="StartAndExpand"
+                               VerticalOptions="CenterAndExpand"/>
                             </StackLayout>
                         </Frame>
                     </DataTemplate>

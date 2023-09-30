@@ -2,28 +2,39 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Portafolio.Views.HomePage"
+
              Title="Principal">
     <ScrollView>
         <Grid>
             <!-- Definición de las filas -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <!-- CarouselView -->
+                <RowDefinition Height="Auto"/>
+                <!-- Botón "Saber Más" -->
+                <RowDefinition Height="Auto"/>
+                <!-- Imagen 1 -->
+                <RowDefinition Height="Auto"/>
+                <!-- Imagen 2 -->
             </Grid.RowDefinitions>
 
-            <!-- Imagen -->
-            <Image Grid.Row="0" Source="https://rmsoft.com.co/Portafolio/porta.jpg" Aspect="AspectFit" />
+            <CarouselView Grid.Row="0" ItemsSource="{Binding ImagePaths}" 
+          Position="{Binding CurrentPosition}"
+          HorizontalOptions="FillAndExpand"
+          VerticalOptions="FillAndExpand">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding ImagePath}" Aspect="AspectFit"/>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+            <Button Grid.Row="1" Text="Saber Mas" HorizontalOptions="CenterAndExpand" FontAttributes="Bold" CornerRadius="10" Margin="20,15" BackgroundColor="Aqua"/>
+            <Image Grid.Row="2" Source="https://rmsoft.com.co/Portafolio/Portada.jpg" Aspect="AspectFit" Margin="0,0,0,0"/>
+            <!-- Removido el margen -->
+            <Image Grid.Row="3" Source="https://rmsoft.com.co/Portafolio/Contac.jpg" Aspect="AspectFit" Margin="0,0,0,0"/>
+            <!-- Removido el margen -->
 
-            <!-- Texto de 150 caracteres con margen y centrado verticalmente -->
-            <Label 
-            Grid.Row="1" 
-            Text="Este es un texto de muestra para representar los 150 caracteres que se quieren mostrar en la aplicación. ¿Se ve bien?" 
-            VerticalOptions="Center" 
-            HorizontalOptions="CenterAndExpand"
-            Margin="15,20,15,0" />
-            <!-- Margen: izquierda, arriba, derecha, abajo -->
         </Grid>
     </ScrollView>
-
 
 </ContentPage>

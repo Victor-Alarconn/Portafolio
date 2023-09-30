@@ -15,8 +15,11 @@ namespace Portafolio.ViewModels
     public class SolucionesPageViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<grupo> Grupos { get; set; }
+        private grupo selectedGroup;
 
         private ObservableCollection<main> contenidos;
+
+        public ObservableCollection<CardDataModel> Contenido { get; set; }
         public ObservableCollection<main> Contenidos
         {
             get { return contenidos; }
@@ -31,6 +34,25 @@ namespace Portafolio.ViewModels
         {
             Grupos = new ObservableCollection<grupo>();
             CargarProductos();
+
+
+            Contenido = new ObservableCollection<CardDataModel>
+            {
+                new CardDataModel { Url = "http://rmsoft.com.co/imagenesR/gato1.jpg", Descripcion = "Descripción 1" },
+                new CardDataModel { Url = "http://rmsoft.com.co/imagenesR/gato4.jpg", Descripcion = "Descripción 2" },
+            
+            };
+        }
+
+        public void SelectGroup(grupo groupToSelect)
+        {
+            if (selectedGroup != null)
+                selectedGroup.IsSelected = false;
+
+            groupToSelect.IsSelected = true;
+            selectedGroup = groupToSelect;
+
+            OnPropertyChanged(nameof(Grupos));  // Notifica que la lista de grupos ha cambiado
         }
 
         private bool _isGroupSelected;
@@ -63,9 +85,13 @@ namespace Portafolio.ViewModels
                 });
             }
         }
+        public async Task<string> ObtenerContenidoDesdeUrl(string url)
+        {
+            using HttpClient client = new HttpClient();
+            return await client.GetStringAsync(url);
+        }
 
-
-        public List<main> ObtenerContenidoPorGrupo(grupo grupo)
+        public async Task<List<main>> ObtenerContenidoPorGrupo(grupo grupo)
         {
             List<main> contenidos = new List<main>();
 
@@ -78,18 +104,27 @@ namespace Portafolio.ViewModels
             using MySqlDataReader reader = command.ExecuteReader();
             while (reader.Read())  // Usa "while" en lugar de "if" para procesar todos los registros
             {
+                var descripcion = reader["pt_desc"].ToString();
+
+                // Verifica si "descripcion" es una URL y, de ser así, obtiene el contenido
+                if (Uri.IsWellFormedUriString(descripcion, UriKind.Absolute))
+                {
+                    descripcion = await ObtenerContenidoDesdeUrl(descripcion);
+                }
+
                 contenidos.Add(new main
                 {
                     Id_pt = Convert.ToInt32(reader["id_pt"]),
                     Nombre = reader["pt_nombre"].ToString(),
                     GrupoId = Convert.ToInt32(reader["Id_gr"]),
                     Url = reader["pt_url"].ToString(),
-                    Descripcion = reader["pt_desc"].ToString()
+                    Descripcion = descripcion
                 });
             }
 
             return contenidos; // Devuelve la lista completa de registros
         }
+
 
 
         public event PropertyChangedEventHandler PropertyChanged;

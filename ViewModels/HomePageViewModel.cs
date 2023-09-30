@@ -1,12 +1,116 @@
-﻿using System;
+﻿using MySqlConnector;
+using Portafolio.Data;
+using Portafolio.Views;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Portafolio.ViewModels
 {
-    internal class HomePageViewModel
+    public class ImageInfo
     {
+        public string ImagePath { get; set; }
+    }
+    public class HomePageViewModel : INotifyPropertyChanged
+    {
+
+        private System.Timers.Timer _carouselTimer;
+        public ObservableCollection<ImageInfo> ImagePaths { get; set; }
+
+        private string _imagen;
+        public string Imagen
+        {
+            get => _imagen;
+            set
+            {
+                _imagen = value;
+                OnPropertyChanged(nameof(Imagen));
+            }
+        }
+
+        private int _currentPosition;
+        public int CurrentPosition
+        {
+            get => _currentPosition;
+            set
+            {
+                _currentPosition = value;
+                OnPropertyChanged(nameof(CurrentPosition));
+            }
+        }
+
+        public HomePageViewModel()
+        {
+
+            ImagePaths = new ObservableCollection<ImageInfo>();
+            // Cargar las imágenes desde la base de datos
+            CargarImagenesDesdeBD();
+
+            _carouselTimer = new System.Timers.Timer();
+            _carouselTimer.Interval = 10000; // 10 segundos
+            _carouselTimer.Elapsed += (s, e) =>
+            {
+                CurrentPosition = (CurrentPosition + 1) % ImagePaths.Count;
+            };
+            _carouselTimer.Start();
+        }
+
+        private void CargarImagenesDesdeBD()
+        {
+            using MySqlConnection connection = DataConexion.ObtenerConexion();
+            connection.Open();
+
+            string query = "SELECT ruta_img FROM pt_imgs";
+            using MySqlCommand cmd = new MySqlCommand(query, connection);
+            using MySqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                string ruta = reader.GetString("ruta_img");
+
+                // Utilizando el Dispatcher sugerido
+                Application.Current.Dispatcher.Dispatch(() =>
+                {
+                    ImagePaths.Add(new ImageInfo { ImagePath = ruta });
+                });
+            }
+        }
+
+
+
+        public static async Task<string> DescargarImagenYGuardar(string imageUrl)
+        {
+            try
+            {
+                using var client = new HttpClient();
+                var bytes = await client.GetByteArrayAsync(imageUrl);
+
+                // Aquí es donde cambiamos la lógica de almacenamiento
+                var dataDir = System.IO.Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, "images");
+                if (!System.IO.Directory.Exists(dataDir))
+                {
+                    System.IO.Directory.CreateDirectory(dataDir);
+                }
+                var filename = System.IO.Path.Combine(dataDir, System.IO.Path.GetRandomFileName() + ".jpg");
+                await System.IO.File.WriteAllBytesAsync(filename, bytes);
+
+                return filename;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al descargar la imagen: {ex.Message}");
+                return string.Empty;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

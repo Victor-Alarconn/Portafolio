@@ -6,6 +6,17 @@
              x:Class="Portafolio.App">
     <Application.Resources>
         <ResourceDictionary>
+            <Style x:Key="AdaptiveTextStyle" TargetType="Label">
+                <Setter Property="TextColor">
+                    <Setter.Value>
+                        <OnPlatform x:TypeArguments="Color">
+                            <On Platform="iOS" Value="Black" />
+                            <On Platform="Android" Value="Black" />
+                            <On Platform="UWP" Value="Black" />
+                        </OnPlatform>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />

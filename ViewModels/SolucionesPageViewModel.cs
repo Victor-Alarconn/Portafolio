@@ -19,7 +19,7 @@ namespace Portafolio.ViewModels
 
         private ObservableCollection<main> contenidos;
 
-        public ObservableCollection<CardDataModel> Contenido { get; set; }
+        public ObservableCollection<CardDataModel> imagenes;
         public ObservableCollection<main> Contenidos
         {
             get { return contenidos; }
@@ -30,18 +30,21 @@ namespace Portafolio.ViewModels
             }
         }
 
+        public ObservableCollection<CardDataModel> Imagenes
+        {
+            get { return imagenes; }
+            set
+            {
+                imagenes = value;
+                OnPropertyChanged(nameof(Imagenes));
+            }
+        }
+
         public SolucionesPageViewModel()
         {
             Grupos = new ObservableCollection<grupo>();
             CargarProductos();
 
-
-            Contenido = new ObservableCollection<CardDataModel>
-            {
-                new CardDataModel { Url = "http://rmsoft.com.co/imagenesR/gato1.jpg", Descripcion = "Descripción 1" },
-                new CardDataModel { Url = "http://rmsoft.com.co/imagenesR/gato4.jpg", Descripcion = "Descripción 2" },
-            
-            };
         }
 
         public void SelectGroup(grupo groupToSelect)
@@ -123,6 +126,40 @@ namespace Portafolio.ViewModels
             }
 
             return contenidos; // Devuelve la lista completa de registros
+        }
+
+
+        public async Task<List<CardDataModel>> ObtenerContenidoPorid(int idContenido)
+        {
+            List<CardDataModel> imagenes = new List<CardDataModel>();
+
+            using MySqlConnection connection = DataConexion.ObtenerConexion();
+            connection.Open();
+
+            MySqlCommand command = new MySqlCommand("SELECT * FROM pt_conten WHERE id_pt = @id", connection);
+            command.Parameters.AddWithValue("@id", idContenido);
+
+            using MySqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())  
+            {
+               // var descripcion = reader["pt_desc"].ToString();
+
+                // Verifica si "descripcion" es una URL y, de ser así, obtiene el contenido
+                //if (Uri.IsWellFormedUriString(descripcion, UriKind.Absolute))
+                //{
+                //    descripcion = await ObtenerContenidoDesdeUrl(descripcion);
+                //}
+
+                imagenes.Add(new CardDataModel
+                {
+                    //Id_pt = Convert.ToInt32(reader["id_pt"]),
+                    //GrupoId = Convert.ToInt32(reader["Id_gr"]),
+                    Url = reader["pt_conte"].ToString(),
+                   // Descripcion = descripcion
+                });
+            }
+
+            return imagenes; // Devuelve la lista completa de registros
         }
 
 

@@ -37,7 +37,7 @@
                                 </Image>
 
                                 <!-- Nombre del grupo -->
-                                <Label Text="{Binding Nombre}" FontAttributes="Bold" Margin="2"
+                                <Label Text="{Binding Nombre}" Style="{StaticResource AdaptiveTextStyle}" FontAttributes="Bold" Margin="2"
                                HorizontalTextAlignment="Center"
                                VerticalTextAlignment="Center"
                                HorizontalOptions="CenterAndExpand">
@@ -54,6 +54,7 @@
             <ContentView IsVisible="{Binding IsGroupSelected, Converter={StaticResource InverseBooleanConverter}}">
                 <Label Text="Por favor, selecciona un grupo de la izquierda" 
                    HorizontalOptions="CenterAndExpand" 
+                   Style="{StaticResource AdaptiveTextStyle}"
                    VerticalOptions="CenterAndExpand"/>
             </ContentView>
 
@@ -83,13 +84,15 @@
                                    FontSize="12" 
                                    FontAttributes="Bold"
                                    HorizontalTextAlignment="Center" 
+                                   Style="{StaticResource AdaptiveTextStyle}"
                                    HorizontalOptions="CenterAndExpand"/>
                                 </StackLayout>
 
                                     <!-- Descripción en el contenedor derecho -->
                                 <Label Text="{Binding Descripcion}" 
                                FontSize="15" 
-                               HorizontalTextAlignment="Start" 
+                               HorizontalTextAlignment="Start"
+                               Style="{StaticResource AdaptiveTextStyle}"
                                HorizontalOptions="StartAndExpand"
                                VerticalOptions="CenterAndExpand"/>
                             </StackLayout>

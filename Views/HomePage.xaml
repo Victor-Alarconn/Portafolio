@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Portafolio.Views.HomePage"
-
+             xmlns:viewmodels="clr-namespace:Portafolio.Modelos"
+               xmlns:local="clr-namespace:Portafolio.ViewModels"
              Title="Principal">
     <ScrollView>
         <Grid>
@@ -18,23 +19,31 @@
                 <!-- Imagen 2 -->
             </Grid.RowDefinitions>
 
-            <CarouselView Grid.Row="0" ItemsSource="{Binding ImagePaths}" 
-          Position="{Binding CurrentPosition}"
-          HorizontalOptions="FillAndExpand"
-          VerticalOptions="FillAndExpand">
+            <CarouselView Grid.Row="0" 
+                      ItemsSource="{Binding ImagePaths}" 
+                      Position="{Binding CurrentPosition}"
+                      HorizontalOptions="FillAndExpand"
+                      VerticalOptions="FillAndExpand">
                 <CarouselView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="local:ImageInfo">
                         <Image Source="{Binding ImagePath}" Aspect="AspectFit"/>
                     </DataTemplate>
                 </CarouselView.ItemTemplate>
             </CarouselView>
-            <Button Grid.Row="1" Text="Saber Mas" HorizontalOptions="CenterAndExpand" FontAttributes="Bold" CornerRadius="10" Margin="20,15" BackgroundColor="Aqua"/>
-            <Image Grid.Row="2" Source="https://rmsoft.com.co/Portafolio/Portada.jpg" Aspect="AspectFit" Margin="0,0,0,0"/>
-            <!-- Removido el margen -->
-            <Image Grid.Row="3" Source="https://rmsoft.com.co/Portafolio/Contac.jpg" Aspect="AspectFit" Margin="0,0,0,0"/>
-            <!-- Removido el margen -->
 
+            <!-- Especificamos Grid.Row="1" para que el botón se coloque en la segunda fila -->
+            <Button Grid.Row="1" 
+                Command="{Binding OpenLinkCommand}" 
+                Text="Saber Mas" 
+                HorizontalOptions="CenterAndExpand" 
+                FontAttributes="Bold" 
+                CornerRadius="10" 
+                Margin="20,5"/>
+
+            <Image Grid.Row="2" Source="https://rmsoft.com.co/Portafolio/Portada.jpg" Aspect="AspectFit" Margin="0"/>
+            <Image Grid.Row="3" Source="https://rmsoft.com.co/Portafolio/Contac.jpg" Aspect="AspectFit" Margin="0"/>
         </Grid>
     </ScrollView>
+
 
 </ContentPage>

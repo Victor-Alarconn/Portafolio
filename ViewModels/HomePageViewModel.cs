@@ -8,17 +8,20 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Portafolio.ViewModels
 {
     public class ImageInfo
     {
         public string ImagePath { get; set; }
+        public string Link { get; set; }
     }
     public class HomePageViewModel : INotifyPropertyChanged
     {
 
         private System.Timers.Timer _carouselTimer;
+        public ICommand OpenLinkCommand { get; private set; }
         public ObservableCollection<ImageInfo> ImagePaths { get; set; }
 
         private string _imagen;
@@ -47,6 +50,7 @@ namespace Portafolio.ViewModels
         {
 
             ImagePaths = new ObservableCollection<ImageInfo>();
+            OpenLinkCommand = new Command(OpenLink);
             // Cargar las imágenes desde la base de datos
             CargarImagenesDesdeBD();
 
@@ -59,23 +63,44 @@ namespace Portafolio.ViewModels
             _carouselTimer.Start();
         }
 
+        private async void OpenLink()
+        {
+            var selectedItem = ImagePaths[CurrentPosition];
+            if (selectedItem != null)
+            {
+                try
+                {
+                    bool result = await Launcher.OpenAsync(new Uri(selectedItem.Link));
+                    if (!result)
+                    {
+                        Console.WriteLine("No se pudo abrir la URL.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error al abrir la URL: {ex.Message}");
+                }
+            }
+        }
+
         private void CargarImagenesDesdeBD()
         {
             using MySqlConnection connection = DataConexion.ObtenerConexion();
             connection.Open();
 
-            string query = "SELECT ruta_img FROM pt_imgs";
+            string query = "SELECT ruta_img, pt_links FROM pt_imgs";
             using MySqlCommand cmd = new MySqlCommand(query, connection);
             using MySqlDataReader reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
                 string ruta = reader.GetString("ruta_img");
+                string link = reader.GetString("pt_links");
 
                 // Utilizando el Dispatcher sugerido
                 Application.Current.Dispatcher.Dispatch(() =>
                 {
-                    ImagePaths.Add(new ImageInfo { ImagePath = ruta });
+                    ImagePaths.Add(new ImageInfo { ImagePath = ruta, Link = link });
                 });
             }
         }

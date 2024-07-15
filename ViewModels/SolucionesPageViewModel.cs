@@ -16,7 +16,7 @@ namespace Portafolio.ViewModels
     {
         public ObservableCollection<grupo> Grupos { get; set; }
         private grupo selectedGroup;
-
+        private DateTime? lastSelectionTime;
         private ObservableCollection<main> contenidos;
 
         public ObservableCollection<CardDataModel> imagenes;
@@ -45,6 +45,21 @@ namespace Portafolio.ViewModels
             Grupos = new ObservableCollection<grupo>();
             CargarProductos();
 
+            // Iniciar temporizador para verificar la última selección
+            Device.StartTimer(TimeSpan.FromSeconds(10), () =>
+            {
+                if (IsGroupSelected && lastSelectionTime.HasValue)
+                {
+                    if ((DateTime.Now - lastSelectionTime.Value).TotalMinutes >= 1)
+                    {
+                        IsGroupSelected = false;
+                        lastSelectionTime = null;
+                    }
+                }
+
+                return true; // Esto mantendrá el temporizador en marcha
+            });
+
         }
 
         public void SelectGroup(grupo groupToSelect)
@@ -55,8 +70,11 @@ namespace Portafolio.ViewModels
             groupToSelect.IsSelected = true;
             selectedGroup = groupToSelect;
 
+            lastSelectionTime = DateTime.Now;  // Actualiza la hora de la última selección
+
             OnPropertyChanged(nameof(Grupos));  // Notifica que la lista de grupos ha cambiado
         }
+
 
         private bool _isGroupSelected;
         public bool IsGroupSelected
@@ -80,14 +98,19 @@ namespace Portafolio.ViewModels
             using MySqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
+                string urlBase = reader["pt_url"].ToString();
+                long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                string urlConTimestamp = $"{urlBase}?timestamp={timestamp}";
+
                 Grupos.Add(new grupo
                 {
                     Id_grupo = Convert.ToInt32(reader["id_grupo"]),
                     Nombre = reader["pt_nombre"].ToString(),
-                    Url = reader["pt_url"].ToString()
+                    Url = urlConTimestamp
                 });
             }
         }
+
         public async Task<string> ObtenerContenidoDesdeUrl(string url)
         {
             using HttpClient client = new HttpClient();
@@ -115,12 +138,16 @@ namespace Portafolio.ViewModels
                     descripcion = await ObtenerContenidoDesdeUrl(descripcion);
                 }
 
+                string urlBase = reader["pt_url"].ToString();
+                long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                string urlConTimestamp = $"{urlBase}?timestamp={timestamp}";
+
                 contenidos.Add(new main
                 {
                     Id_pt = Convert.ToInt32(reader["id_pt"]),
                     Nombre = reader["pt_nombre"].ToString(),
                     GrupoId = Convert.ToInt32(reader["Id_gr"]),
-                    Url = reader["pt_url"].ToString(),
+                    Url = urlConTimestamp,
                     Descripcion = descripcion
                 });
             }
@@ -140,27 +167,21 @@ namespace Portafolio.ViewModels
             command.Parameters.AddWithValue("@id", idContenido);
 
             using MySqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())  
+            while (reader.Read())
             {
-               // var descripcion = reader["pt_desc"].ToString();
-
-                // Verifica si "descripcion" es una URL y, de ser así, obtiene el contenido
-                //if (Uri.IsWellFormedUriString(descripcion, UriKind.Absolute))
-                //{
-                //    descripcion = await ObtenerContenidoDesdeUrl(descripcion);
-                //}
+                string urlBase = reader["pt_conte"].ToString();
+                long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                string urlConTimestamp = $"{urlBase}?timestamp={timestamp}";
 
                 imagenes.Add(new CardDataModel
                 {
-                    //Id_pt = Convert.ToInt32(reader["id_pt"]),
-                    //GrupoId = Convert.ToInt32(reader["Id_gr"]),
-                    Url = reader["pt_conte"].ToString(),
-                   // Descripcion = descripcion
+                    Url = urlConTimestamp,
                 });
             }
 
             return imagenes; // Devuelve la lista completa de registros
         }
+
 
 
 

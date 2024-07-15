@@ -50,57 +50,73 @@
         </StackLayout>
         <StackLayout Grid.Column="1">
 
-            <!-- Contenido por defecto -->
-            <ContentView IsVisible="{Binding IsGroupSelected, Converter={StaticResource InverseBooleanConverter}}">
-                <Label Text="Por favor, selecciona un grupo de la izquierda" 
-                   HorizontalOptions="CenterAndExpand" 
-                   Style="{StaticResource AdaptiveTextStyle}"
-                   VerticalOptions="CenterAndExpand"/>
-            </ContentView>
+            <ScrollView VerticalOptions="FillAndExpand">
+                <!-- Envuelve todo en un StackLayout -->
+                <StackLayout>
+                    <!-- Contenido por defecto -->
+                <ContentView IsVisible="{Binding IsGroupSelected, Converter={StaticResource InverseBooleanConverter}}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="15*"/>
+                        </Grid.RowDefinitions>
 
-            <!-- Contenido basado en la selección -->
-            <CollectionView IsVisible="{Binding IsGroupSelected}" 
-                ItemsSource="{Binding Contenidos}" 
-                ItemsLayout="VerticalList">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame Padding="5" CornerRadius="18" BorderColor="Gray" HasShadow="True" Margin="9">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnCardTapped"/>
-                            </Frame.GestureRecognizers>
-                            <StackLayout Orientation="Horizontal" Spacing="15">
+                            <Image Source="https://rmsoft.com.co/Portafolio/Soluciones/historia.jpg?timestamp=1234567890" 
+                       HorizontalOptions="CenterAndExpand" 
+                       VerticalOptions="CenterAndExpand"
+                       Aspect="AspectFit"
+                       Grid.Row="0"/>
+                            <Image Source="https://rmsoft.com.co/Portafolio/Soluciones/pie.jpg?timestamp=1234567890" 
+                       HorizontalOptions="CenterAndExpand" 
+                       VerticalOptions="CenterAndExpand"
+                       Aspect="AspectFit"
+                       Grid.Row="1"/>
+                    </Grid>
+                </ContentView>
 
-                                <!-- Contenedor para Imagen y Título a la izquierda -->
-                                <StackLayout WidthRequest="80" Spacing="5">
-                                    <!-- Imagen en la parte superior del contenedor izquierdo -->
-                                    <Image Source="{Binding Url}" 
-                                       WidthRequest="50" 
-                                       HeightRequest="40"
+                <!-- Contenido basado en la selección -->
+                <CollectionView IsVisible="{Binding IsGroupSelected}" 
+                        ItemsSource="{Binding Contenidos}" 
+                        ItemsLayout="VerticalList">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="5" CornerRadius="18" BorderColor="Gray" HasShadow="True" Margin="9">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnCardTapped"/>
+                                </Frame.GestureRecognizers>
+                                <StackLayout Orientation="Horizontal" Spacing="15">
+
+                                    <!-- Contenedor para Imagen y Título a la izquierda -->
+                                    <StackLayout WidthRequest="80" Spacing="5">
+                                        <!-- Imagen en la parte superior del contenedor izquierdo -->
+                                        <Image Source="{Binding Url}" 
+                                       WidthRequest="120" 
+                                       HeightRequest="70"
                                        Aspect="AspectFill">
-                                    </Image>
-
+                                        </Image>
                                         <!-- Nombre debajo de la imagen en el contenedor izquierdo -->
-                                        <Label Text="{Binding Nombre}" 
-                                   FontSize="12" 
-                                   FontAttributes="Bold"
-                                   HorizontalTextAlignment="Center" 
-                                   Style="{StaticResource AdaptiveTextStyle}"
-                                   HorizontalOptions="CenterAndExpand"/>
-                                </StackLayout>
+                                        <!--<Label Text="{Binding Nombre}" 
+                                       FontSize="12" 
+                                       FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center" 
+                                       Style="{StaticResource AdaptiveTextStyle}"
+                                       HorizontalOptions="CenterAndExpand"/>-->
+                                    </StackLayout>
 
                                     <!-- Descripción en el contenedor derecho -->
-                                <Label Text="{Binding Descripcion}" 
-                               FontSize="15" 
-                               HorizontalTextAlignment="Start"
-                               Style="{StaticResource AdaptiveTextStyle}"
-                               HorizontalOptions="StartAndExpand"
-                               VerticalOptions="CenterAndExpand"/>
-                            </StackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
+                                    <Label Text="{Binding Descripcion}" 
+                                   FontSize="21" 
+                                   HorizontalTextAlignment="Center"
+                                   Style="{StaticResource AdaptiveTextStyle}"
+                                   HorizontalOptions="CenterAndExpand"
+                                   VerticalOptions="CenterAndExpand"/>
+                                </StackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                </StackLayout>
+            </ScrollView>
 
         </StackLayout>
     </Grid>

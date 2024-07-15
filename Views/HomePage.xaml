@@ -40,8 +40,8 @@
                 CornerRadius="10" 
                 Margin="20,5"/>
 
-            <Image Grid.Row="2" Source="https://rmsoft.com.co/Portafolio/Portada.jpg" Aspect="AspectFit" Margin="0"/>
-            <Image Grid.Row="3" Source="https://rmsoft.com.co/Portafolio/Contac.jpg" Aspect="AspectFit" Margin="0"/>
+            <Image Grid.Row="2" Source="https://rmsoft.com.co/Portafolio/Principal/Portada.jpg?timestamp=1234567890" Aspect="AspectFit" Margin="0"/>
+            <Image Grid.Row="3" Source="https://rmsoft.com.co/Portafolio/Principal/Contacto.jpg?timestamp=1234567890" Aspect="AspectFit" Margin="0"/>
         </Grid>
     </ScrollView>
 

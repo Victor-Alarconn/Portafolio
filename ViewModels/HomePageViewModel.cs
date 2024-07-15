@@ -94,16 +94,20 @@ namespace Portafolio.ViewModels
 
             while (reader.Read())
             {
-                string ruta = reader.GetString("ruta_img");
+                string rutaBase = reader.GetString("ruta_img");
+                long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                string rutaConTimestamp = $"{rutaBase}?timestamp={timestamp}";
+
                 string link = reader.GetString("pt_links");
 
                 // Utilizando el Dispatcher sugerido
                 Application.Current.Dispatcher.Dispatch(() =>
                 {
-                    ImagePaths.Add(new ImageInfo { ImagePath = ruta, Link = link });
+                    ImagePaths.Add(new ImageInfo { ImagePath = rutaConTimestamp, Link = link });
                 });
             }
         }
+
 
 
 
